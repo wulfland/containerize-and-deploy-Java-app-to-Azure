@@ -152,6 +152,16 @@ Removing intermediate container 78835beea340
 Successfully built cda4f5b459f1
 Successfully tagged turkishairlines:latest
 ```
+
+ - From your CLI run `docker image ls`
+*- (This will list all of you Docker images)*
+
+```cli
+docker image ls
+REPOSITORY                                        TAG                 IMAGE ID            CREATED             SIZE
+turkishairlines                                   latest              cda4f5b459f1        About an hour ago   692MB
+```
+
 **Step 6**
 Run your Docker image
 
@@ -209,8 +219,17 @@ Login to Turkish Airlines http://localhost:8080/TurkishAirlines with a customer 
 
 ![enter image description here](https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App/blob/master/Images/main.png?raw=true)
 
+ - From your CLI run `ctrl- c`
+*- (This will shutdown and destroy the Container)*
+
 **Step 6**
 Publish and deploy your Docker image
+
+You can push your Docker image(s) to the Azure Container Registry. By doing so, your image(s) will be network close to all of your Azure resources, such as your Azure Kubernetes Cluster. We will ultimately configure AKS to pull the TurkishAirlines image from Azure Container Registry.
+
+ - From your CLI run `az acr build --registry "$AZ_CONTAINER_REGISTRY" --resource-group="$AZ_RESOURCE_GROUP" --image turkishairlines:latest .`
+	 *- (This will once again build a TurkishAirlines Docker image, however this time it will also **PUSH** it into Azure Container Registry*
+
 
 Things you can now do now with this guide
 
