@@ -15,7 +15,8 @@ Containerizing Java applications is simple and the modern way of building & depl
 **Step 1**
 Get your environment ready
 
- - Fork or clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App
+ - From your CLI run `gh repo clone chtrembl/Flight-Booking-System-JavaServlets_App`
+	 *- (This will clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App)*
  
  - From your CLI run `az login`
 	 *- (This will authenticate you into Azure ARM)*
@@ -51,9 +52,19 @@ Provision Azure Resources
 	 *- (This will authenticate to the newly created Azure Container Registry. )*
 	 
  - From your CLI run `az aks create --resource-group="$AZ_RESOURCE_GROUP" --name="$AZ_KUBERNETES_CLUSTER" --attach-acr "$AZ_CONTAINER_REGISTRY" --dns-name-prefix=<youralias>"$AZ_KUBERNETES_CLUSTER" --generate-ssh-keys`
- >🛑 Be sure to substitute your own values for <youralias> because this must be globally unique, use lowercase letters and should not have special characters.
-	 *- (This will create an Azure Kubernetes Cluster that we will be deploying the Java application (Docker image) to. )*
+   *- (This will create an Azure Kubernetes Cluster that we will be deploying the Java application (Docker image) to. )*
+
+> 📝 Please Note the following, this step will take some time (20 mins or so) to complete while Azure provisions resources for you.
+> 
+ >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should container lowercase letters and should not have special characters.
 	 
+**Step 3**
+Containerize your application
+
+With containers, we will be sharing the host machines kernel and operating system. We will be using the Docker runtime to to build a Docker image that will deploy to the host operating system. In this guide, we will be building and deploying this Docker image to a worker node in the newly created Azure Kubernetes Cluster.
+
+ - [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) App
+
 Things you can now do now with this guide
 
 ☑️ How to containerize and containerize a Java application and deploy to the cloud
