@@ -6,7 +6,6 @@
 > - Azure Subscription
 > - GIT CLI and/or GitHub
 > - Azure CLI
-> - CLI
 > - JAVA JDK 8+ 
 > - Maven (Optional if you want to build the application outside of Docker)
 > - Docker Hub Login (To pull Maven & Tomcat base image if you do not already have them cached)
@@ -31,10 +30,23 @@ Get your environment ready
 Provision Azure Resources
 
  - From your CLI run `AZ_RESOURCE_GROUP=javacontainerizationdemorg`
-	 *- (You can use whatever resource group you choose, this guide will assume you have chosen javacontainerizationdemorg)*
+	 *- (This will set the Azure resource group variable that will be used to specify the Azure Resource Group. You can use whatever resource group you prefer, this guide will assume you have chosen javacontainerizationdemorg)*
+
+ - From your CLI run `AZ_CONTAINER_REGISTRY=javacontainerizationdemoacr`
+	 *- (This will set the Azure Container Registry variable that will be used to specify the Azure Container Registry. You can use whatever Azure Container Registry value you prefer, this guide will assume you have chosen javacontainerizationdemoacr)*
 
  - From your CLI run `az group create --name="$AZ_RESOURCE_GROUP" --location=eastus`
+	 *- (This will provision the resource group. You can use whatever location you prefer)*
+	 
+ - From your CLI run `az acr create --resource-group "$AZ_RESOURCE_GROUP" --name "$AZ_CONTAINER_REGISTRY" --sku Basic`
+	 *- (This will provision the Azure Container Registry. This resource will be used to retain the Docker images containing the Turkish Airlines Java application we build below. )*
 
+ - From your CLI run `az configure --defaults acr="$AZ_CONTAINER_REGISTRY"`
+	 *- (This will set the newly created Azure Container Registry as the default for this session. )*
+	 
+ - From your CLI run `az acr login -n "$AZ_CONTAINER_REGISTRY"`
+	 *- (This will authenticate to the newly created Azure Container Registry. )*
+	 
 Things you can now do now with this guide
 
 ☑️ How to containerize and containerize a Java application and deploy to the cloud
