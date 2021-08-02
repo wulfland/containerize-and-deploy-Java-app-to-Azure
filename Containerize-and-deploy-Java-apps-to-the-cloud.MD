@@ -1,4 +1,4 @@
-# Containerize and deploy Java apps to cloud
+# Containerize and deploy Java apps to the cloud
 
 **This guide will walk through the steps needed to containerize a Java application and deploy to the cloud**
 
