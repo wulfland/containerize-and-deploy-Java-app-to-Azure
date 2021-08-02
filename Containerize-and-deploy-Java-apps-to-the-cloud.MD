@@ -4,13 +4,36 @@
 
 > 📝 Please Note you will need the following to complete this guide
 > - Azure Subscription
+> - GIT CLI and/or GitHub
 > - Azure CLI
 > - CLI
 > - JAVA JDK 8+ 
-> - Maven
-> - Docker Hub Login (To pull Tomcat base image if you do not already have one cached)
+> - Maven (Optional if you want to build the application outside of Docker)
+> - Docker Hub Login (To pull Maven & Tomcat base image if you do not already have them cached)
 
-Containerizing Java applications is simple. 
+Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize and existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
+
+**Step 1**
+Get your environment ready
+
+ - Fork or clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App
+ 
+ - From your CLI run `az login`
+	 *- (This will authenticate you into Azure ARM)*
+	 
+ - From your CLI run `az account list --output table`
+	 *- (This will list your Azure subscriptions, make note of the subscription you want to use for this guide)*
+	 
+ - From your CLI run `az account set --subscription  "Your subscription name"`
+	 *- (This will set the Azure subscription that will hold the resources needed for your Java application deployment)*
+
+**Step 2**
+Provision Azure Resources
+
+ - From your CLI run `AZ_RESOURCE_GROUP=javacontainerizationdemorg`
+	 *- (You can use whatever resource group you choose, this guide will assume you have chosen javacontainerizationdemorg)*
+
+ - From your CLI run `az group create --name="$AZ_RESOURCE_GROUP" --location=eastus`
 
 Things you can now do now with this guide
 
