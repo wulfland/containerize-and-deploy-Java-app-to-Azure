@@ -1,12 +1,3 @@
-#BUILD Application
-FROM maven
-
-COPY pom.xml /tmp/
-
-WORKDIR /tmp/
-
-RUN mvn -f pom.xml clean package
-
 #BUILD Docker image
 FROM tomcat
 
