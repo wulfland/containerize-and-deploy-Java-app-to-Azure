@@ -80,7 +80,7 @@ Provision Azure Resources
 
 > 📝 Please Note the following, this step will take some time (20 mins or so) to complete while Azure provisions resources for you.
 > 
- >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should container lowercase letters and should not have special characters.
+ >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should be lowercase letters and should not have special characters, if you do not enter a prefix for <youralias> you will get an error because javacontainerizationdemoaks is already taken.
 	 
 **Step 4**
 Containerize your application with a Dockerfile.
@@ -229,6 +229,85 @@ You can push your Docker image(s) to the Azure Container Registry. By doing so, 
 
  - From your CLI run `az acr build --registry "$AZ_CONTAINER_REGISTRY" --resource-group="$AZ_RESOURCE_GROUP" --image turkishairlines:latest .`
 	 *- (This will once again build a TurkishAirlines Docker image, however this time it will also **PUSH** it into Azure Container Registry*
+
+ - From your CLI run `az acr repository show -n "$AZ_CONTAINER_REGISTRY" --image turkishairlines:latest`
+	 *- (This will show the details of the TurkishAirlines Docker image that was just pushed to Azure Container Registry*
+
+```cli
+az acr repository show -n "$AZ_CONTAINER_REGISTRY" --image turkishairlines:latest
+{
+  "changeableAttributes": {
+    "deleteEnabled": true,
+    "listEnabled": true,
+    "readEnabled": true,
+    "writeEnabled": true
+  },
+  "createdTime": "2021-08-02T22:31:47.9603181Z",
+  "digest": "sha256:cda94ea9c3cf89032cb2cdbe298b003061734550fc877492c6aff12ee675dc5d",
+  "lastUpdateTime": "2021-08-02T22:31:47.9603181Z",
+  "name": "latest",
+  "signed": false
+}
+```
+Let's deploy this TurkishAirlines Docker image to your AzureKubernetesCluster. 
+
+ - From your CLI run `vi deployment.yml` or open this file in the editor of your choice.
+	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluser.*
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turkishairlines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turkishairlines
+  template:
+    metadata:
+      labels:
+  app: turkishairlines
+    spec:
+      nodeSelector:
+  "beta.kubernetes.io/os": linux
+      containers:
+      - name: turkishairlines
+  image: javacontainerizationdemoacr.azurecr.io/turkishairlines:latest
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  ports:
+  - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: turkishairlines
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: turkishairlines
+```
+> 📝 Please Note the following, if your deploying turkishairlines, all you will need to update in this file is the image: line. Ensure image: is pointing to your Azure Container Registry that you specified earlier, most likely image: **<youralias>javacontainerizationdemoacr.azurecr.io/turkishairlines:latest**
+
+Save the updates to deployment.yml
+
+ - From your CLI run `kubectl apply -f deployment.yml`
+ 	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluster.)*
+
+```cli
+ kubectl apply -f deployment.yml
+deployment.apps/turkishairlines created
+service/turkishairlines created
+```
 
 
 Things you can now do now with this guide
