@@ -10,10 +10,10 @@
 > - Maven (Optional if you want to build the application outside of Docker)
 > - Docker Hub Login (To pull Maven & Tomcat base image if you do not already have them cached)
 
-Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize and existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
+Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize an existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
 
 **Step 1**
-Get your environment ready
+Get your local environment ready
 
  - Fork or clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App
  
