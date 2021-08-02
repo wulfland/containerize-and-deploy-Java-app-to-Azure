@@ -10,10 +10,10 @@
 > - Maven (Optional if you want to build the application outside of Docker)
 > - Docker Hub Login (To pull Maven & Tomcat base image if you do not already have them cached)
 
-Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize an existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
+Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize and existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
 
 **Step 1**
-Get your local environment ready
+Get your environment ready
 
  - Fork or clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App
  
@@ -35,6 +35,9 @@ Provision Azure Resources
  - From your CLI run `AZ_CONTAINER_REGISTRY=javacontainerizationdemoacr`
 	 *- (This will set the Azure Container Registry variable that will be used to specify the Azure Container Registry. You can use whatever Azure Container Registry value you prefer, this guide will assume you have chosen javacontainerizationdemoacr)*
 
+ - From your CLI run `AZ_KUBERNETES_CLUSTER=javacontainerizationdemoaks`
+	 *- (This will set the Azure Kubernetes Cluster variable that will be used to specify the Azure Kubernetes Cluster Configuration. You can use whatever Azure Kubernetes Cluster value you prefer, this guide will assume you have chosen javacontainerizationdemoaks)*
+
  - From your CLI run `az group create --name="$AZ_RESOURCE_GROUP" --location=eastus`
 	 *- (This will provision the resource group. You can use whatever location you prefer)*
 	 
@@ -46,6 +49,10 @@ Provision Azure Resources
 	 
  - From your CLI run `az acr login -n "$AZ_CONTAINER_REGISTRY"`
 	 *- (This will authenticate to the newly created Azure Container Registry. )*
+	 
+ - From your CLI run `az aks create --resource-group="$AZ_RESOURCE_GROUP" --name="$AZ_KUBERNETES_CLUSTER" --attach-acr "$AZ_CONTAINER_REGISTRY" --dns-name-prefix=<youralias>"$AZ_KUBERNETES_CLUSTER" --generate-ssh-keys`
+ >🛑 Be sure to substitute your own values for <youralias> because this must be globally unique, use lowercase letters and should not have special characters.
+	 *- (This will create an Azure Kubernetes Cluster that we will be deploying the Java application (Docker image) to. )*
 	 
 Things you can now do now with this guide
 
