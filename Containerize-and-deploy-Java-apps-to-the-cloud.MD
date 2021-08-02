@@ -13,11 +13,35 @@
 Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize and existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
 
 **Step 1**
-Get your environment ready
+Build your application
+
+ - The Turkish Airlines Application was originally built with Ant but has since been forked and updated to optionally build with Maven, 
 
  - From your CLI run `gh repo clone chtrembl/Flight-Booking-System-JavaServlets_App`
 	 *- (This will clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App)*
  
+ - From your CLI cd to `Flight-Booking-System-JavaServlets_App`
+ 
+ - From your CLI run `cd Project/TurkishAirlines`
+*- (You should now be in the TurkishAirlines project root, for example /mnt/c/Users/chtrembl/dev/git/Flight-Booking-System-JavaServlets_App/Project/TurkishAirlines)*
+
+ - From your CLI run `mvn clean install`
+*- (Maven should build your application and upon success you will see the following artifact TurkishAirlines-0.0.1-SNAPSHOT.war )*
+
+	```cli
+	[INFO] Building war: /mnt/c/Users/chtrembl/dev/git/Flight-Booking-System-JavaServlets_App/Project/TurkishAirlines/target/TurkishAirlines-0.0.1-SNAPSHOT.war
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD SUCCESS
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Total time:  17.698 s
+	[INFO] Finished at: 2021-08-02T15:18:07-04:00
+	[INFO] ------------------------------------------------------------------------
+	```
+At this point you can take this TurkishAirlines-0.0.1-SNAPSHOT.war and deploy it to your Application Server of choice and TurkishAirlines customers can start using all of the features. However, this type of deployment is cumbersome for many reasons such as all of the orchestration elements such as scale, hence the reason we are going to containerize this application and deploy to Azure cloud!
+
+**Step 2**
+Get your environment ready
+
  - From your CLI run `az login`
 	 *- (This will authenticate you into Azure ARM)*
 	 
@@ -27,7 +51,7 @@ Get your environment ready
  - From your CLI run `az account set --subscription  "Your subscription name"`
 	 *- (This will set the Azure subscription that will hold the resources needed for your Java application deployment)*
 
-**Step 2**
+**Step 3**
 Provision Azure Resources
 
  - From your CLI run `AZ_RESOURCE_GROUP=javacontainerizationdemorg`
@@ -58,12 +82,18 @@ Provision Azure Resources
 > 
  >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should container lowercase letters and should not have special characters.
 	 
-**Step 3**
+**Step 4**
 Containerize your application
 
 With containers, we will be sharing the host machines kernel and operating system. We will be using the Docker runtime to to build a Docker image that will deploy to the host operating system. In this guide, we will be building and deploying this Docker image to a worker node in the newly created Azure Kubernetes Cluster.
 
- - [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) App
+With Docker we will be building Docker
+
+**Step 5**
+Build a Docker image
+
+**Step 6**
+Publish and deploy your Docker image
 
 Things you can now do now with this guide
 
