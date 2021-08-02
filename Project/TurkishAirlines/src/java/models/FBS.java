@@ -217,7 +217,7 @@ public class FBS
 
         try 
         {
-            p = new File(FBS.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "\\airlines.accdb";
+            p = new File(FBS.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "/airlines.accdb";
         }
         catch (URISyntaxException ex) 
         {
@@ -296,7 +296,7 @@ public class FBS
 
         try 
         {
-            p = new File(FBS.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "\\airlines.accdb";
+            p = new File(FBS.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "/airlines.accdb";
         }
         catch (URISyntaxException ex) 
         {

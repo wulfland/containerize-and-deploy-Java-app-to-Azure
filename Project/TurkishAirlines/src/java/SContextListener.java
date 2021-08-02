@@ -30,7 +30,7 @@ public class SContextListener implements ServletContextListener
 
         try 
         {
-            p = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "\\airlines.accdb";
+            p = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getPath() + "/airlines.accdb";
         }
         catch (URISyntaxException ex) 
         {
