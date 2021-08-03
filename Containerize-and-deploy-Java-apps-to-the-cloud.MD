@@ -1,6 +1,6 @@
-# Containerize and deploy Java apps to the cloud
+# Containerize and deploy Java apps to Azure cloud
 
-**This guide will walk through the steps needed to containerize a Java application and deploy to the cloud**
+**This guide will walk through the steps needed to containerize a Java application and deploy to Azure cloud**
 
 > 📝 Please Note you will need the following to complete this guide
 > - Azure Subscription
@@ -80,8 +80,16 @@ Provision Azure Resources
 
 > 📝 Please Note the following, this step will take some time (20 mins or so) to complete while Azure provisions resources for you.
 > 
- >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should container lowercase letters and should not have special characters.
-	 
+ >🛑 Be sure to substitute your own value for <youralias> because this must be globally unique. This should be lowercase letters and should not have special characters, if you do not enter a prefix for <youralias> you will get an error because javacontainerizationdemoaks is already taken.
+
+ - From your CLI run `az aks get-credentials --resource-group "$AZ_RESOURCE_GROUP" --name <youralias>"$AZ_KUBERNETES_CLUSTER"`
+   *- (This will download the cluster configuration information so you can manage your cluster from the Kubernetes web interface and  from `kubectl`)*
+
+	```cli
+	az aks get-credentials --resource-group "$AZ_RESOURCE_GROUP" --name javacontainerizationdemoaks
+	Merged "javacontainerizationdemoaks" as current context in /home/chtrembl/.kube/config
+	```
+		 
 **Step 4**
 Containerize your application with a Dockerfile.
 
@@ -152,6 +160,16 @@ Removing intermediate container 78835beea340
 Successfully built cda4f5b459f1
 Successfully tagged turkishairlines:latest
 ```
+
+ - From your CLI run `docker image ls`
+*- (This will list all of you Docker images)*
+
+```cli
+docker image ls
+REPOSITORY                                        TAG                 IMAGE ID            CREATED             SIZE
+turkishairlines                                   latest              cda4f5b459f1        About an hour ago   692MB
+```
+
 **Step 6**
 Run your Docker image
 
@@ -209,8 +227,110 @@ Login to Turkish Airlines http://localhost:8080/TurkishAirlines with a customer 
 
 ![enter image description here](https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App/blob/master/Images/main.png?raw=true)
 
+ - From your CLI run `ctrl- c`
+*- (This will shutdown and destroy the Container)*
+
 **Step 6**
 Publish and deploy your Docker image
+
+You can push your Docker image(s) to the Azure Container Registry. By doing so, your image(s) will be network close to all of your Azure resources, such as your Azure Kubernetes Cluster. We will ultimately configure AKS to pull the TurkishAirlines image from Azure Container Registry.
+
+ - From your CLI run `az acr build --registry "$AZ_CONTAINER_REGISTRY" --resource-group "$AZ_RESOURCE_GROUP" --image turkishairlines:latest .`
+	 *- (This will once again build a TurkishAirlines Docker image, however this time it will also **PUSH** it into Azure Container Registry*
+
+ - From your CLI run `az acr repository show -n "$AZ_CONTAINER_REGISTRY" --image turkishairlines:latest`
+	 *- (This will show the details of the TurkishAirlines Docker image that was just pushed to Azure Container Registry*
+
+```cli
+az acr repository show -n "$AZ_CONTAINER_REGISTRY" --image turkishairlines:latest
+{
+  "changeableAttributes": {
+    "deleteEnabled": true,
+    "listEnabled": true,
+    "readEnabled": true,
+    "writeEnabled": true
+  },
+  "createdTime": "2021-08-02T22:31:47.9603181Z",
+  "digest": "sha256:cda94ea9c3cf89032cb2cdbe298b003061734550fc877492c6aff12ee675dc5d",
+  "lastUpdateTime": "2021-08-02T22:31:47.9603181Z",
+  "name": "latest",
+  "signed": false
+}
+```
+Let's deploy this TurkishAirlines Docker image to your AzureKubernetesCluster. 
+
+ - From your CLI run `vi deployment.yml` or open this file in the editor of your choice.
+	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluser.*
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turkishairlines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turkishairlines
+  template:
+    metadata:
+      labels:
+  app: turkishairlines
+    spec:
+      nodeSelector:
+  "beta.kubernetes.io/os": linux
+      containers:
+      - name: turkishairlines
+  image: javacontainerizationdemoacr.azurecr.io/turkishairlines:latest
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  ports:
+  - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: turkishairlines
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: turkishairlines
+```
+> 📝 Please Note the following, if your deploying turkishairlines, all you will need to update in this file is the image: line. Ensure image: is pointing to your Azure Container Registry that you specified earlier, most likely image: **<youralias>javacontainerizationdemoacr.azurecr.io/turkishairlines:latest**
+
+Save the updates to deployment.yml
+
+ - From your CLI run `kubectl apply -f deployment.yml`
+ 	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluster.)*
+
+```cli
+ kubectl apply -f deployment.yml
+deployment.apps/turkishairlines created
+service/turkishairlines created
+```
+```cli
+ kubectl get all
+NAME                                   READY   STATUS              RESTARTS   AGE
+pod/turkishairlines-75647c4c98-9v7vk   0/1     ContainerCreating   0          13s
+
+NAME                      TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes        ClusterIP      10.0.0.1      <none>        443/TCP          7h28m
+service/turkishairlines   LoadBalancer   10.0.34.128   <pending>     8080:30265/TCP   13s
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/turkishairlines   0/1     1            0           13s
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/turkishairlines-75647c4c98   1         1         0       13s
+```
 
 Things you can now do now with this guide
 
