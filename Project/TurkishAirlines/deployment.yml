@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turkishairlines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turkishairlines
+  template:
+    metadata:
+      labels:
+        app: turkishairlines
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: turkishairlines
+        image: javacontainerizationdemoacr.azurecr.io/turkishairlines:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: turkishairlines
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: turkishairlines
+    
