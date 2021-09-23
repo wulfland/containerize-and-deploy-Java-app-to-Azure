@@ -1,4 +1,4 @@
-# Containerize and deploy Java apps to Azure cloud
+# Containerize and deploy Java apps to Azure
 
 **This guide will walk through the steps needed to containerize a Java application and deploy to Azure cloud**
 
