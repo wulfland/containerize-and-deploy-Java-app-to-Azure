@@ -1,4 +1,4 @@
-# Containerize and deploy Java apps to Azure cloud
+# Containerize and deploy Java apps to Azure
 
 **This guide will walk through the steps needed to containerize a Java application and deploy to Azure cloud**
 
@@ -10,12 +10,12 @@
 > - Maven 
 > - Docker Hub Login (To pull Maven & Tomcat base image if you do not already have them cached)
 
-Containerizing Java applications is simple and the modern way of building & deploying applications at scale. In this guide we will look at the steps needed to containerize and existing Java application and deploy it to the cloud. You're welcome to use your own Java application, or following along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
+Containerizing Java applications has many benefits for  building & deploying applications at scale. In this guide we will look at the steps needed to containerize an existing Java application and deploy it to Azure Kubernetes Service in Azure cloud. You're welcome to use your own Java application, or follow along with one we have chosen. We've selected one from the wild, [TurkishAirlines](https://github.com/harismuneer/Flight-Booking-System-JavaServlets_App) A fully responsive web-based Flight Booking System for Turkish Airlines based on the Model View Controller (MVC) Architecture made using Java Servlets, Java Server Pages (JSPs). Since this application was originally built with Ant, we've decided to fork it and introduce Maven as an optional build implementation.
 
 **Step 1**
 Build your application
 
- - The Turkish Airlines Application was originally built with Ant but has since been forked and updated to optionally build with Maven, 
+ - The Turkish Airlines Application was originally built with Ant but has since been forked and updated to optionally build with Maven.
 
  - From your CLI run `gh repo clone chtrembl/Flight-Booking-System-JavaServlets_App`
 	 *- (This will clone https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App)*
@@ -37,7 +37,7 @@ Build your application
 	[INFO] Finished at: 2021-08-02T15:18:07-04:00
 	[INFO] ------------------------------------------------------------------------
 	```
-At this point you can take this TurkishAirlines-0.0.1-SNAPSHOT.war and deploy it to your Application Server of choice and TurkishAirlines customers can start using all of the features. However, this type of deployment is cumbersome for many reasons such as all of the orchestration elements such as scale, hence the reason we are going to containerize this application and deploy to Azure cloud!
+At this point you can take this TurkishAirlines-0.0.1-SNAPSHOT.war and deploy it to your Application Server of choice and TurkishAirlines customers can start using all of the features. However, this type of deployment is cumbersome for many reasons such as orchestration elements like scale, hence the reason we are going to containerize this application and deploy to Azure cloud!
 
 **Step 2**
 Get your environment ready
@@ -225,6 +225,9 @@ NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED -
 ```
 Login to Turkish Airlines http://localhost:8080/TurkishAirlines with a customer from [tomcat-users.xml](https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App/blob/master/Project/TurkishAirlines/tomcat-users.xml) and start exploring!
 
+**username: shariq@customer.com
+password:  c**
+
 ![enter image description here](https://github.com/chtrembl/Flight-Booking-System-JavaServlets_App/blob/master/Images/main.png?raw=true)
 
  - From your CLI run `ctrl- c`
@@ -259,7 +262,7 @@ az acr repository show -n "$AZ_CONTAINER_REGISTRY" --image turkishairlines:lates
 ```
 Let's deploy this TurkishAirlines Docker image to your AzureKubernetesCluster. 
 
- - From your CLI run `vi deployment.yml` or open this file in the editor of your choice.
+ - From your CLI run `vi deployment.yml` or open this [deployment.yml](https://raw.githubusercontent.com/chtrembl/Flight-Booking-System-JavaServlets_App/master/Project/TurkishAirlines/deployment.yml) in the editor of your choice.
 	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluser.*
 
 ```yml
@@ -312,12 +315,12 @@ Save the updates to deployment.yml
  	 *- (This is the Kubernetes manifest that informs Azure Kubernetes Service of the desired state you wish to run in. It contains things like what Docker image to use when creating containers and how to ingress into your cluster.)*
 
 ```cli
- kubectl apply -f deployment.yml
+kubectl apply -f deployment.yml
 deployment.apps/turkishairlines created
 service/turkishairlines created
 ```
 ```cli
- kubectl get all
+kubectl get all
 NAME                                   READY   STATUS              RESTARTS   AGE
 pod/turkishairlines-75647c4c98-9v7vk   0/1     ContainerCreating   0          13s
 
@@ -332,7 +335,9 @@ NAME                                         DESIRED   CURRENT   READY   AGE
 replicaset.apps/turkishairlines-75647c4c98   1         1         0       13s
 ```
 
+The CLUSTER-IP LoadBalancer IP Address is how you will access Turkish Airlines
+
 Things you can now do now with this guide
 
-☑️ How to containerize and containerize a Java application and deploy to the cloud
+☑️ How to containerize a Java application and deploy to Azure cloud
 
