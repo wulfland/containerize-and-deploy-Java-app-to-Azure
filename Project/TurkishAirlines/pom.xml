@@ -88,39 +88,25 @@
 			<systemPath>${project.basedir}/web/WEB-INF/lib/gson-2.2.2.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>webservices-api</groupId>
-			<artifactId>webservices-api</artifactId>
-			<version>1.0</version>
+			<groupId>javax.annotation</groupId>
+			<artifactId>api</artifactId>
+			<version>1.2</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-api.jar</systemPath>
+			<systemPath>${project.basedir}/web/WEB-INF/lib/javax.annotation-api-1.2.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>webservices-extra</groupId>
-			<artifactId>webservices-extra</artifactId>
-			<version>1.0</version>
+			<groupId>webservices</groupId>
+			<artifactId>api</artifactId>
+			<version>2.3.1</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-extra.jar</systemPath>
+			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-api-2.3.1.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>webservices-extra-api</groupId>
-			<artifactId>webservices-extra-api</artifactId>
-			<version>1.0</version>
+			<groupId>webservices</groupId>
+			<artifactId>rt</artifactId>
+			<version>2.3.1</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-extra-api.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>webservices-rt</groupId>
-			<artifactId>webservices-rt</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-rt.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>webservices-tools</groupId>
-			<artifactId>webservices-tools</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-tools.jar</systemPath>
+			<systemPath>${project.basedir}/web/WEB-INF/lib/webservices-rt-2.3.1.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>
