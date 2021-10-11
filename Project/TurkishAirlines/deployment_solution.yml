@@ -12,11 +12,9 @@ spec:
       labels:
         app: turkishairlines
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       containers:
       - name: turkishairlines
-        image: javacontainerizationdemoacr.azurecr.io/turkishairlines:latest
+        image: <AZ_CONTAINER_REGISTRY>.azurecr.io/turkishairlines:latest
         resources:
           requests:
             cpu: "1"
@@ -38,4 +36,3 @@ spec:
     targetPort: 8080
   selector:
     app: turkishairlines
-    
