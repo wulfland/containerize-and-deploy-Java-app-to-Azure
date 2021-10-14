@@ -13,6 +13,6 @@ RUN mvn clean package
 #
 FROM tomcat:8.5.72-jre11-openjdk-slim
 COPY tomcat-users.xml /usr/local/tomcat/conf
-COPY --from=build /build/target/*.war /usr/local/tomcat/webapps/AirlinesReservationSample.war
+COPY --from=build /build/target/*.war /usr/local/tomcat/webapps/FlightBookingSystemSample.war
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
