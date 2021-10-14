@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: turkishairlines
+  name: airlinesreservationsample
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: turkishairlines
+      app: airlinesreservationsample
   template:
     metadata:
       labels:
-        app: turkishairlines
+        app: airlinesreservationsample
     spec:
       containers:
-      - name: turkishairlines
-        image: <AZ_CONTAINER_REGISTRY>.azurecr.io/turkishairlines:latest
+      - name: airlinesreservationsample
+        image: <AZ_CONTAINER_REGISTRY>.azurecr.io/airlinesreservationsample:latest
         resources:
           requests:
             cpu: "1"
@@ -28,11 +28,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: turkishairlines
+  name: airlinesreservationsample
 spec:
   type: LoadBalancer
   ports:
   - port: 8080
     targetPort: 8080
   selector:
-    app: turkishairlines
+    app: airlinesreservationsample
